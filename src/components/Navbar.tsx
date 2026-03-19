@@ -5,19 +5,17 @@ import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIsAdmin } from '@/hooks/useIsAdmin';
-import { ShoppingBag, Heart, User, LogOut, Menu, X, LayoutDashboard } from 'lucide-react';
+import { ShoppingBag, Heart, User, LogOut, Menu, LayoutDashboard } from 'lucide-react';
 
 const navLinks = [
-  { label: "Home",         to: "/" },
-  { label: "Shop",         to: "/products" },
-  { label: "Collections",  to: "/collections" },
-  { label: "New",          to: "/new-arrivals" },
-  { label: "Eid",          to: "/eid-festive" },
-  { label: "Sale",         to: "/sale",        isSale: true },
-  { label: "Lookbook",     to: "/lookbook" },
-  { label: "Craftsmanship",to: "/craftsmanship" },
-  { label: "About",        to: "/about" },
-  { label: "Contact",      to: "/contact" },
+  { label: "Shop",          to: "/products" },
+  { label: "Collections",   to: "/collections" },
+  { label: "New In",        to: "/new-arrivals" },
+  { label: "Festive",       to: "/eid-festive" },
+  { label: "Sale",          to: "/sale",        isSale: true },
+  { label: "Lookbook",      to: "/lookbook" },
+  { label: "Craftsmanship", to: "/craftsmanship" },
+  { label: "About",         to: "/about" },
 ];
 
 export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
@@ -31,7 +29,7 @@ export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 56);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -40,33 +38,48 @@ export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
 
   return (
     <motion.nav
-      className={`sticky top-0 z-[2000] transition-all duration-500 ${solid ? 'glass-nav shadow-lg' : 'bg-transparent'}`}
-      initial={{ y: -80, opacity: 0 }}
+      className={`sticky top-0 z-[2000] transition-all duration-500 ${solid ? 'glass-nav shadow-[0_1px_0_rgba(255,255,255,.04)]' : 'bg-transparent'}`}
+      initial={{ y: -72, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: .65, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 flex items-center justify-between h-16 md:h-[72px]">
+      <div className="max-w-[1480px] mx-auto px-5 md:px-10 flex items-center justify-between h-[60px] md:h-[68px]">
 
         {/* ── Logo ── */}
-        <button onClick={() => navigate('/')} className="flex items-baseline gap-px bg-transparent border-none cursor-pointer group select-none">
-          <span className="font-heading text-2xl md:text-3xl font-bold text-ivory transition-colors group-hover:text-ivory/80">Ameerah</span>
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-baseline gap-[2px] bg-transparent border-none cursor-pointer group select-none"
+        >
+          <span
+            className="font-heading text-[22px] md:text-[26px] font-light tracking-[.06em] transition-opacity group-hover:opacity-80"
+            style={{ color: 'hsl(var(--ivory))' }}
+          >
+            AMEERAH
+          </span>
           <motion.span
-            className="font-heading text-3xl font-bold text-gradient"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          >.</motion.span>
+            className="font-heading text-[28px] font-light"
+            style={{ color: 'hsl(var(--gold))' }}
+            animate={{ opacity: [.5, 1, .5] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            .
+          </motion.span>
         </button>
 
         {/* ── Desktop Nav ── */}
-        <div className="hidden lg:flex items-center gap-5 xl:gap-7 glass px-7 py-2.5 rounded-full">
+        <div className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navLinks.map(link => {
             const active = location.pathname === link.to;
             return (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`nav-link text-[10px] xl:text-[11px] uppercase tracking-[.16em] font-semibold transition-colors duration-300 ${
-                  link.isSale ? 'text-red-400 hover:text-red-300' : active ? 'text-gold' : 'text-ivory/60 hover:text-ivory'
+                className={`nav-link text-[10px] xl:text-[10.5px] uppercase tracking-[.18em] font-medium transition-colors duration-300 ${
+                  link.isSale
+                    ? 'text-rose-400/90 hover:text-rose-300'
+                    : active
+                      ? 'text-[hsl(var(--gold))]'
+                      : 'text-white/50 hover:text-white/90'
                 } ${active ? 'active' : ''}`}
               >
                 {link.label}
@@ -76,54 +89,51 @@ export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
         </div>
 
         {/* ── Right Icons ── */}
-        <div className="flex items-center gap-3">
-
+        <div className="flex items-center gap-1.5 md:gap-2">
           {isAdmin && (
             <motion.button
               onClick={() => navigate('/admin')}
-              title="Admin Dashboard"
-              className="text-gold/70 hover:text-gold bg-transparent border-none cursor-pointer p-1"
-              whileHover={{ scale: 1.12 }}
-              whileTap={{ scale: 0.9 }}
+              title="Admin"
+              className="text-white/40 hover:text-[hsl(var(--gold))] bg-transparent border-none cursor-pointer p-1.5 transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: .9 }}
             >
-              <LayoutDashboard size={19} strokeWidth={1.5} />
+              <LayoutDashboard size={17} strokeWidth={1.4} />
             </motion.button>
           )}
 
-          {/* Auth */}
           {user ? (
             <motion.button
               onClick={() => { if (window.confirm('Sign out?')) signOut(); }}
               title="Sign Out"
-              className="text-ivory/60 hover:text-gold bg-transparent border-none cursor-pointer p-1"
-              whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.9 }}
+              className="text-white/40 hover:text-[hsl(var(--gold))] bg-transparent border-none cursor-pointer p-1.5 transition-colors"
+              whileHover={{ scale: 1.1 }} whileTap={{ scale: .9 }}
             >
-              <LogOut size={19} strokeWidth={1.5} />
+              <LogOut size={17} strokeWidth={1.4} />
             </motion.button>
           ) : (
             <motion.button
               onClick={() => navigate('/login')}
-              className="text-ivory/60 hover:text-gold bg-transparent border-none cursor-pointer p-1"
-              whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.9 }}
+              className="text-white/40 hover:text-white/90 bg-transparent border-none cursor-pointer p-1.5 transition-colors"
+              whileHover={{ scale: 1.1 }} whileTap={{ scale: .9 }}
             >
-              <User size={19} strokeWidth={1.5} />
+              <User size={17} strokeWidth={1.4} />
             </motion.button>
           )}
 
-          {/* Wishlist */}
           <motion.button
             aria-label="Wishlist"
             onClick={showWishlist}
-            className="relative text-ivory/60 hover:text-rose-400 bg-transparent border-none cursor-pointer p-1"
-            whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.9 }}
+            className="relative text-white/40 hover:text-rose-400 bg-transparent border-none cursor-pointer p-1.5 transition-colors"
+            whileHover={{ scale: 1.1 }} whileTap={{ scale: .9 }}
           >
-            <Heart size={19} strokeWidth={1.5} />
+            <Heart size={17} strokeWidth={1.4} />
             <AnimatePresence>
               {wishlistCount > 0 && (
                 <motion.span
                   key="wc"
                   initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
-                  className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold"
+                  className="absolute -top-1 -right-1 bg-rose-500 text-white text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold leading-none"
                 >
                   {wishlistCount}
                 </motion.span>
@@ -131,20 +141,19 @@ export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
             </AnimatePresence>
           </motion.button>
 
-          {/* Cart */}
           <motion.button
             aria-label="Cart"
             onClick={showCart}
-            className="relative text-ivory/60 hover:text-gold bg-transparent border-none cursor-pointer p-1"
-            whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.9 }}
+            className="relative text-white/40 hover:text-[hsl(var(--gold))] bg-transparent border-none cursor-pointer p-1.5 transition-colors"
+            whileHover={{ scale: 1.1 }} whileTap={{ scale: .9 }}
           >
-            <ShoppingBag size={19} strokeWidth={1.5} />
+            <ShoppingBag size={17} strokeWidth={1.4} />
             <AnimatePresence>
               {cartCount > 0 && (
                 <motion.span
                   key="cc"
                   initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}
-                  className="absolute -top-1.5 -right-1.5 bg-gold text-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold"
+                  className="absolute -top-1 -right-1 bg-[hsl(var(--gold))] text-black text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-bold leading-none"
                 >
                   {cartCount}
                 </motion.span>
@@ -152,14 +161,13 @@ export default function Navbar({ onOpenMobile }: { onOpenMobile: () => void }) {
             </AnimatePresence>
           </motion.button>
 
-          {/* Hamburger */}
           <motion.button
             aria-label="Menu"
             onClick={onOpenMobile}
-            className="lg:hidden text-ivory/70 hover:text-gold bg-transparent border-none cursor-pointer p-1 ml-1"
-            whileTap={{ scale: 0.85 }}
+            className="lg:hidden text-white/50 hover:text-white/90 bg-transparent border-none cursor-pointer p-1.5 ml-1 transition-colors"
+            whileTap={{ scale: .85 }}
           >
-            <Menu size={22} strokeWidth={1.5} />
+            <Menu size={20} strokeWidth={1.4} />
           </motion.button>
         </div>
       </div>
